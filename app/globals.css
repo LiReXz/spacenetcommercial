@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --grid-line: rgba(148, 163, 184, 0.06);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  @apply bg-void text-frost font-body antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(34, 211, 238, 0.25);
+  color: #f8fafc;
+}
+
+/* Thin scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #030509;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+@layer components {
+  .container-site {
+    @apply mx-auto w-full max-w-7xl px-6 md:px-10;
+  }
+
+  .section-label {
+    @apply font-mono text-[11px] uppercase tracking-[0.25em] text-pulse/80;
+  }
+
+  .glass {
+    background: rgba(10, 16, 32, 0.55);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(148, 163, 184, 0.1);
+  }
+
+  .hairline {
+    border: 1px solid rgba(148, 163, 184, 0.12);
+  }
+
+  .text-gradient {
+    background: linear-gradient(120deg, #f8fafc 30%, #7dd3fc 70%, #22d3ee 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .grid-bg {
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+}
+
+/* Starfield */
+.starfield {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.star {
+  position: absolute;
+  border-radius: 9999px;
+  background: #e2e8f0;
+  animation: twinkle var(--tw-dur, 5s) ease-in-out infinite;
+  animation-delay: var(--tw-delay, 0s);
+}
+@keyframes twinkle {
+  0%, 100% { opacity: var(--tw-min, 0.15); }
+  50% { opacity: var(--tw-max, 0.8); }
+}
+
+/* Animated dashed signal links (Mininode ↔ ground stations / satellites) */
+.signal-line {
+  stroke-dasharray: 5 5;
+  animation: sigDash 1.2s linear infinite;
+}
+@keyframes sigDash {
+  to {
+    stroke-dashoffset: -20;
+  }
+}
