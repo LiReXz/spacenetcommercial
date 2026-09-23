@@ -26,6 +26,16 @@ export function Navbar() {
     { href: "#security", label: t.nav.security },
   ];
 
+  // Mobile menu links scroll explicitly — plain href anchors can be
+  // swallowed when an ancestor ends up as a scroll container on mobile.
+  const goTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    setOpen(false);
+    document
+      .getElementById(href.slice(1))
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
@@ -128,7 +138,7 @@ export function Navbar() {
                   <a
                     key={p.href + p.name}
                     href={p.href}
-                    onClick={() => setOpen(false)}
+                    onClick={(e) => goTo(e, p.href)}
                     className="block rounded-lg py-2.5 pl-6 pr-3 text-base text-mist transition-colors hover:bg-white/5 hover:text-frost"
                   >
                     {p.name}
@@ -139,7 +149,7 @@ export function Navbar() {
                 <li key={l.href}>
                   <a
                     href={l.href}
-                    onClick={() => setOpen(false)}
+                    onClick={(e) => goTo(e, l.href)}
                     className="block rounded-lg px-3 py-3 text-base text-mist transition-colors hover:bg-white/5 hover:text-frost"
                   >
                     {l.label}
@@ -149,7 +159,7 @@ export function Navbar() {
               <li className="pt-2">
                 <a
                   href="#contact"
-                  onClick={() => setOpen(false)}
+                  onClick={(e) => goTo(e, "#contact")}
                   className="block rounded-full border border-pulse/40 bg-pulse/10 px-5 py-3 text-center text-sm font-medium text-pulse"
                 >
                   {t.nav.contact}

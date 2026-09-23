@@ -16,7 +16,7 @@ export default function Home() {
   return (
     <LanguageProvider>
       <Navbar />
-      <main>
+      <main className="overflow-x-clip">
         <Hero />
         <Problem />
         <Mininode />
