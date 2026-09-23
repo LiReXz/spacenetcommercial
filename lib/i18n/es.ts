@@ -3,6 +3,10 @@ import type { Dictionary } from "./types";
 export const es: Dictionary = {
   nav: {
     platform: "Plataforma",
+    product: "Producto",
+    productItems: [
+      { name: "MiniNode-01", desc: "Nodo de computación orbital", href: "#mininode" },
+    ],
     technology: "Tecnología",
     useCases: "Casos de uso",
     developers: "Developers",
@@ -112,7 +116,7 @@ export const es: Dictionary = {
       {
         phase: "Ahora",
         title: "Despliega tu software",
-        body: "Tus workloads se ejecutan en la CPU/GPU a bordo de Mininode para procesar datos espaciales.",
+        body: "Tus workloads se ejecutan en la CPU/GPU a bordo de MiniNode-01 para procesar datos espaciales.",
       },
       {
         phase: "Siguiente",
@@ -231,6 +235,38 @@ export const es: Dictionary = {
       complete: "Completado",
     },
   },
+  mininode: {
+    label: "El hardware",
+    title: "Conoce MiniNode-01.",
+    subtitle:
+      "Un nodo de computación en órbita — un bus satelital estándar que lleva un payload CPU/GPU rugerizado. Aquí es donde corre tu software.",
+    caption: "Vista explotada conceptual — ilustrativa, no a escala",
+    products: ["MiniNode-01"],
+    upcoming: ["MiniNode-02"],
+    comingSoon: "Pronto",
+    parts: [
+      {
+        title: "Paneles solares",
+        body: "Alas de silicio que alimentan el sistema de potencia en cada órbita — dimensionadas para cargas de computación, no solo para housekeeping.",
+      },
+      {
+        title: "Módulo de computación",
+        body: "El núcleo MiniNode-01: CPU/GPU a bordo con memoria y almacenamiento gestionados. Aquí se ejecuta tu workload.",
+      },
+      {
+        title: "Bus satelital",
+        body: "Estructura, distribución de potencia y control térmico — la plataforma que mantiene vivo el payload órbita tras órbita.",
+      },
+      {
+        title: "Comunicaciones",
+        body: "Enlaces en banda S/X con estaciones terrenas — telemetría y resultados hacia abajo, workloads y actualizaciones hacia arriba, en cada ventana de contacto.",
+      },
+      {
+        title: "ADCS",
+        body: "Determinación y control de actitud — star trackers y ruedas de reacción mantienen el nodo estable y orientado.",
+      },
+    ],
+  },
   developers: {
     label: "Diseñado para developers",
     title: "Trae tu propio software.",
@@ -294,7 +330,7 @@ export const es: Dictionary = {
       ours: {
         title: "SpaceNet proporciona",
         items: [
-          "Plataforma de computación orbital y hardware de Mininode (CPU/GPU)",
+          "Plataforma de computación orbital y hardware de MiniNode-01 (CPU/GPU)",
           "Las aplicaciones SpaceNet Forge y SpaceNet Helm, corriendo en nuestra infraestructura",
           "Integración con GitHub — tu código se buildea en nuestros micros",
           "APIs de observabilidad — telemetría, estado de ejecución, resultados",
@@ -382,6 +418,7 @@ export const es: Dictionary = {
           { label: "Visión general", href: "#platform" },
           { label: "Forge", href: "#products" },
           { label: "Helm", href: "#products" },
+          { label: "MiniNode-01", href: "#mininode" },
         ],
       },
       {

@@ -32,7 +32,7 @@ export function Problem() {
             >
               <span className="h-1 w-1 rounded-full bg-pulse/70" />
               {c.title}
-              <span className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 w-52 -translate-x-1/2 rounded-lg border border-steel/40 bg-abyss/95 px-3 py-2 text-[11px] normal-case leading-snug tracking-normal text-mist opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100">
+              <span className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 w-52 max-w-[80vw] -translate-x-1/2 rounded-lg border border-steel/40 bg-abyss/95 px-3 py-2 text-[11px] normal-case leading-snug tracking-normal text-mist opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100">
                 {c.body}
               </span>
             </span>

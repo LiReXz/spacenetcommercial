@@ -7,7 +7,7 @@ Premium B2B marketing landing page for **SpaceNet**, an Orbital Computing-as-a-S
 ## Branding facts
 
 - **Company:** SpaceNet
-- **Satellite / compute node:** Mininode
+- **Satellite / compute node:** MiniNode-01
 - **Product interfaces:** SpaceNet Forge (developer environment) and SpaceNet Helm (mission & operations platform)
 - **Positioning:** "The orbital computing platform for the next generation of space applications."
 
@@ -40,6 +40,7 @@ components/
                     # Mininode highlighted w/ signal links + travelling packets
   Problem.tsx       # "Not every byte needs to reach Earth" + data funnel visual
   Platform.tsx      # 6-stage architecture timeline (Workload → Forge → Helm → Orbital Compute → Processing → Results) + 5-phase roadmap
+  Mininode.tsx      # datasheet-style satellite diagram w/ numbered callouts + hover-synced legend
   HowItWorks.tsx    # 4 steps: Develop / Validate / Deploy / Execute
   Workloads.tsx     # 6 illustrative use cases
   ProductSuite.tsx  # Forge terminal mockup + Helm console mockup
@@ -79,7 +80,7 @@ components/
 - Custom lightweight i18n: `lib/i18n/LanguageProvider.tsx` (React context + `useLanguage()` hook), typed dictionaries in `lib/i18n/en.ts` and `lib/i18n/es.ts`, shared types in `lib/i18n/types.ts`
 - Locale persisted in `localStorage` (`spacenet-locale`), `<html lang>` synced, EN/ES toggle in the navbar
 - **Rule: every new component or UI text must consume `useLanguage()` — never hardcode user-facing strings.** Add the key to `types.ts`, `en.ts` AND `es.ts` in the same change
-- Proper nouns and CLI output (SpaceNet, Mininode, Forge, Helm, terminal commands) stay in English by design
+- Proper nouns and CLI output (SpaceNet, MiniNode-01, Forge, Helm, terminal commands) stay in English by design
 
 ## Maintenance rules
 

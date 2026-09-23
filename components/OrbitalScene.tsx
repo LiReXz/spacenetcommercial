@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 
 /**
@@ -40,7 +40,7 @@ interface SatDef {
 }
 
 const SATS: SatDef[] = [
-  { name: "MININODE", orbit: 0, phase: 0.25, ours: true },
+  { name: "MININODE-01", orbit: 0, phase: 0.25, ours: true },
   { name: "VEGA-3", orbit: 0, phase: 0.15 },
   { name: "ALPHA-1", orbit: 0, phase: 0.4 },
   { name: "KESTREL-2", orbit: 1, phase: 0.1 },
@@ -107,6 +107,8 @@ function arcEnd(o: (typeof ORBITS)[number], sign: 1 | -1) {
 
 export function OrbitalScene() {
   const reduce = useReducedMotion();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [viewBox, setViewBox] = useState("0 0 1440 900");
   const satRefs = useRef<(SVGGElement | null)[]>([]);
   const gsLinkRefs = useRef<(SVGLineElement | null)[]>([]);
   const islLinkRefs = useRef<(SVGLineElement | null)[]>([]);
@@ -138,6 +140,31 @@ export function OrbitalScene() {
       }),
     []
   );
+
+  // Responsive viewBox — keeps the scene proportional to the container's
+  // aspect ratio so Earth stays reasonably sized on any viewport:
+  // - wide screens (aspect ≥ 1.6): full 1440×900 frame, top cropped as needed
+  // - narrower: sides crop symmetrically around Earth's center (x=720)
+  // - portrait (aspect < ~0.9): frame widens upward, showing more sky so the
+  //   planet shrinks to ~45% of the screen width instead of filling it
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const update = () => {
+      const { width: w, height: h } = el.getBoundingClientRect();
+      if (w < 1 || h < 1) return;
+      const aspect = w / h;
+      const vbW = Math.min(1440, Math.max(800, 900 * aspect));
+      const vbH = vbW / aspect;
+      setViewBox(
+        `${(720 - vbW / 2).toFixed(0)} ${(900 - vbH).toFixed(0)} ${vbW.toFixed(0)} ${vbH.toFixed(0)}`
+      );
+    };
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   useEffect(() => {
     opacities.current = initial.map((p) => p.opacity);
@@ -214,7 +241,7 @@ export function OrbitalScene() {
   }, [reduce, initial]);
 
   return (
-    <div className="absolute inset-0" aria-hidden="true">
+    <div ref={containerRef} className="absolute inset-0" aria-hidden="true">
       {/* Starfield */}
       <div className="starfield">
         {stars.map((s) => (
@@ -239,7 +266,7 @@ export function OrbitalScene() {
 
       <svg
         className="absolute inset-0 h-full w-full"
-        viewBox="0 0 1440 900"
+        viewBox={viewBox}
         fill="none"
         preserveAspectRatio="xMidYMax slice"
       >

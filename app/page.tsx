@@ -3,6 +3,7 @@ import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { Problem } from "@/components/Problem";
 import { Platform } from "@/components/Platform";
+import { Mininode } from "@/components/Mininode";
 import { HowItWorks } from "@/components/HowItWorks";
 import { Workloads } from "@/components/Workloads";
 import { ProductSuite } from "@/components/ProductSuite";
@@ -18,6 +19,7 @@ export default function Home() {
       <main>
         <Hero />
         <Problem />
+        <Mininode />
         <Platform />
         <HowItWorks />
         <Workloads />

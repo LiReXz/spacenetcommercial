@@ -27,6 +27,8 @@ interface ProductDict {
 export interface Dictionary {
   nav: {
     platform: string;
+    product: string;
+    productItems: { name: string; desc: string; href: string }[];
     technology: string;
     useCases: string;
     developers: string;
@@ -89,6 +91,16 @@ export interface Dictionary {
       queued: string;
       complete: string;
     };
+  };
+  mininode: {
+    label: string;
+    title: string;
+    subtitle: string;
+    caption: string;
+    products: string[];
+    upcoming: string[];
+    comingSoon: string;
+    parts: DictTitled[];
   };
   developers: {
     label: string;

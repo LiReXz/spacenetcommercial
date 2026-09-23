@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Orbit, Globe } from "lucide-react";
+import { Menu, X, Orbit, Globe, ChevronDown, Satellite } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import type { Locale } from "@/lib/i18n/types";
 
@@ -47,6 +47,33 @@ export function Navbar() {
         </a>
 
         <ul className="hidden items-center gap-8 lg:flex">
+          {/* Product dropdown */}
+          <li className="group relative">
+            <button
+              className="flex items-center gap-1 text-sm text-mist transition-colors hover:text-frost"
+              aria-haspopup="true"
+            >
+              {t.nav.product}
+              <ChevronDown className="h-3.5 w-3.5 transition-transform duration-200 group-hover:rotate-180" />
+            </button>
+            <div className="invisible absolute left-1/2 top-full -translate-x-1/2 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
+              <div className="glass w-64 rounded-xl p-2 shadow-[0_16px_48px_rgba(0,0,0,0.5)]">
+                {t.nav.productItems.map((p) => (
+                  <a
+                    key={p.href + p.name}
+                    href={p.href}
+                    className="flex items-start gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-white/5"
+                  >
+                    <Satellite className="mt-0.5 h-4 w-4 shrink-0 text-pulse" strokeWidth={1.5} />
+                    <span>
+                      <span className="block text-sm font-medium text-frost">{p.name}</span>
+                      <span className="mt-0.5 block text-xs text-mist">{p.desc}</span>
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </li>
           {links.map((l) => (
             <li key={l.href}>
               <a
@@ -89,9 +116,25 @@ export function Navbar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25 }}
-            className="glass overflow-hidden lg:hidden"
+            className="glass max-h-[calc(100dvh-4rem)] overflow-y-auto lg:hidden"
           >
             <ul className="container-site flex flex-col gap-1 py-4">
+              {/* Product group */}
+              <li>
+                <p className="px-3 pb-1 pt-2 font-mono text-[10px] uppercase tracking-[0.2em] text-mist/50">
+                  {t.nav.product}
+                </p>
+                {t.nav.productItems.map((p) => (
+                  <a
+                    key={p.href + p.name}
+                    href={p.href}
+                    onClick={() => setOpen(false)}
+                    className="block rounded-lg py-2.5 pl-6 pr-3 text-base text-mist transition-colors hover:bg-white/5 hover:text-frost"
+                  >
+                    {p.name}
+                  </a>
+                ))}
+              </li>
               {links.map((l) => (
                 <li key={l.href}>
                   <a

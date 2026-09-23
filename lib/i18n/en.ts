@@ -3,6 +3,10 @@ import type { Dictionary } from "./types";
 export const en: Dictionary = {
   nav: {
     platform: "Platform",
+    product: "Product",
+    productItems: [
+      { name: "MiniNode-01", desc: "Orbital compute node", href: "#mininode" },
+    ],
     technology: "Technology",
     useCases: "Use Cases",
     developers: "Developers",
@@ -112,7 +116,7 @@ export const en: Dictionary = {
       {
         phase: "Now",
         title: "Deploy your software",
-        body: "Your workloads run on Mininode's onboard CPU/GPU to process spaceborne data.",
+        body: "Your workloads run on MiniNode-01's onboard CPU/GPU to process spaceborne data.",
       },
       {
         phase: "Next",
@@ -231,6 +235,38 @@ export const en: Dictionary = {
       complete: "Complete",
     },
   },
+  mininode: {
+    label: "The hardware",
+    title: "Meet MiniNode-01.",
+    subtitle:
+      "A compute node in orbit — a standard satellite bus carrying a ruggedized CPU/GPU payload. This is where your software runs.",
+    caption: "Exploded concept view — illustrative, not to scale",
+    products: ["MiniNode-01"],
+    upcoming: ["MiniNode-02"],
+    comingSoon: "Soon",
+    parts: [
+      {
+        title: "Solar arrays",
+        body: "Silicon-wing panels feed the power system through every orbit — sized for compute loads, not just housekeeping.",
+      },
+      {
+        title: "Compute module",
+        body: "The MiniNode-01 core: onboard CPU/GPU with managed memory and storage. Your workload executes here.",
+      },
+      {
+        title: "Satellite bus",
+        body: "Structure, power distribution and thermal control — the platform that keeps the payload alive orbit after orbit.",
+      },
+      {
+        title: "Comms",
+        body: "S/X-band links to ground stations — telemetry and results down, workloads and updates up, inside every contact window.",
+      },
+      {
+        title: "ADCS",
+        body: "Attitude determination and control — star trackers and reaction wheels keep the node stable and pointed.",
+      },
+    ],
+  },
   developers: {
     label: "Built for developers",
     title: "Bring your own software.",
@@ -294,7 +330,7 @@ export const en: Dictionary = {
       ours: {
         title: "SpaceNet provides",
         items: [
-          "Orbital compute platform & Mininode hardware (CPU/GPU)",
+          "Orbital compute platform & MiniNode-01 hardware (CPU/GPU)",
           "SpaceNet Forge & SpaceNet Helm applications, running on our infrastructure",
           "GitHub integration — your code builds on our micros",
           "Observability APIs — telemetry, execution status, results",
@@ -382,6 +418,7 @@ export const en: Dictionary = {
           { label: "Overview", href: "#platform" },
           { label: "Forge", href: "#products" },
           { label: "Helm", href: "#products" },
+          { label: "MiniNode-01", href: "#mininode" },
         ],
       },
       {
