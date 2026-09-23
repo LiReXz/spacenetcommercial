@@ -248,22 +248,32 @@ export const es: Dictionary = {
       {
         title: "Paneles solares",
         body: "Alas de silicio que alimentan el sistema de potencia en cada órbita — dimensionadas para cargas de computación, no solo para housekeeping.",
+        detail:
+          "Dos alas desplegables entregan potencia sostenida durante todo el ciclo — margen suficiente para correr workloads CPU/GPU de forma continua, no a ráfagas. La disposición de celdas y el área de las alas están dimensionadas en torno a la envolvente de computación, así que el payload nunca espera carga.",
       },
       {
         title: "Módulo de computación",
         body: "El núcleo MiniNode-01: CPU/GPU a bordo con memoria y almacenamiento gestionados. Aquí se ejecuta tu workload.",
+        detail:
+          "Un payload CPU/GPU rugerizado con memoria y almacenamiento gestionados, aislado por workload. La plataforma planifica, monitoriza y reinicia los jobs — tú envías código, el módulo lo ejecuta en órbita y devuelve resultados.",
       },
       {
         title: "Bus satelital",
         body: "Estructura, distribución de potencia y control térmico — la plataforma que mantiene vivo el payload órbita tras órbita.",
+        detail:
+          "Una arquitectura de bus estándar gestiona estructura, distribución de potencia y control térmico de forma autónoma. Absorbe el entorno orbital — ciclos térmicos, radiación, eclipses — para que el payload de computación vea condiciones estables.",
       },
       {
         title: "Comunicaciones",
         body: "Enlaces en banda S/X con estaciones terrenas — telemetría y resultados hacia abajo, workloads y actualizaciones hacia arriba, en cada ventana de contacto.",
+        detail:
+          "Radios en banda S/X enlazan el nodo con la red de estaciones terrenas en cada pasada. La telemetría y los resultados bajan, los nuevos workloads y actualizaciones de software suben — todo dentro de la ventana de contacto, sin enlace permanente.",
       },
       {
         title: "ADCS",
         body: "Determinación y control de actitud — star trackers y ruedas de reacción mantienen el nodo estable y orientado.",
+        detail:
+          "Star trackers y ruedas de reacción mantienen la actitud precisa en cada órbita — antena apuntando a las estaciones terrenas durante los contactos, alas al Sol entre ellos. El apuntado es continuo y autónomo.",
       },
     ],
   },

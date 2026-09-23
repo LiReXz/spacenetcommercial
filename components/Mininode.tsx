@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import { Section } from "./Section";
 import { Reveal } from "./Reveal";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
@@ -70,13 +70,17 @@ function Slab({ cx, y, w, d, h, active, tint }: SlabProps) {
 export function Mininode() {
   const { t } = useLanguage();
   const reduce = useReducedMotion();
-  const [active, setActive] = useState<number | null>(null);
+  // hovered = transient highlight; selected = pinned part shown in the
+  // detail panel below. Clicking a part (or its legend card) toggles it.
+  const [hovered, setHovered] = useState<number | null>(null);
+  const [selected, setSelected] = useState<number | null>(null);
 
-  const hl = (i: number) => active === i;
+  const hl = (i: number) => hovered === i || selected === i;
   const stroke = (i: number) => (hl(i) ? "#22d3ee" : "#64748b");
-  const hover = (i: number) => ({
-    onMouseEnter: () => setActive(i),
-    onMouseLeave: () => setActive(null),
+  const selectable = (i: number) => ({
+    onMouseEnter: () => setHovered(i),
+    onMouseLeave: () => setHovered(null),
+    onClick: () => setSelected((prev) => (prev === i ? null : i)),
   });
 
   return (
@@ -129,7 +133,7 @@ export function Mininode() {
                 ))}
 
                 {/* Left solar wing — part 0 (flat iso panel on the bus layer) */}
-                <g {...hover(0)} className="cursor-pointer">
+                <g {...selectable(0)} className="cursor-pointer">
                   <polygon
                     points="180,238 55,266 55,286 180,258"
                     fill={hl(0) ? "rgba(34,211,238,0.08)" : "rgba(10,16,32,0.7)"}
@@ -149,7 +153,7 @@ export function Mininode() {
                 </g>
 
                 {/* Right solar wing — part 0 */}
-                <g {...hover(0)} className="cursor-pointer">
+                <g {...selectable(0)} className="cursor-pointer">
                   <polygon
                     points="380,238 505,266 505,286 380,258"
                     fill={hl(0) ? "rgba(34,211,238,0.08)" : "rgba(10,16,32,0.7)"}
@@ -169,7 +173,7 @@ export function Mininode() {
                 </g>
 
                 {/* ADCS — part 4 (top layer) */}
-                <g {...hover(4)} className="cursor-pointer">
+                <g {...selectable(4)} className="cursor-pointer">
                   <Slab cx={280} y={85} w={42} d={15} h={12} active={hl(4)} />
                   <ellipse
                     cx="280" cy="82" rx="10" ry="5"
@@ -180,7 +184,7 @@ export function Mininode() {
                 </g>
 
                 {/* Compute module — part 1 */}
-                <g {...hover(1)} className="cursor-pointer">
+                <g {...selectable(1)} className="cursor-pointer">
                   <Slab cx={280} y={150} w={72} d={25} h={18} active={hl(1)} tint />
                   <text
                     x="280" y="154" textAnchor="middle" fontSize="9" letterSpacing="1.5"
@@ -192,7 +196,7 @@ export function Mininode() {
                 </g>
 
                 {/* Bus — part 2 */}
-                <g {...hover(2)} className="cursor-pointer">
+                <g {...selectable(2)} className="cursor-pointer">
                   <Slab cx={280} y={235} w={100} d={34} h={24} active={hl(2)} />
                   {/* panel seams on the right face */}
                   <line x1="330" y1="252" x2="330" y2="276" stroke="rgba(148,163,184,0.15)" />
@@ -200,7 +204,7 @@ export function Mininode() {
                 </g>
 
                 {/* Comms — part 3 (bottom layer + dish) */}
-                <g {...hover(3)} className="cursor-pointer">
+                <g {...selectable(3)} className="cursor-pointer">
                   <Slab cx={280} y={325} w={58} d={20} h={14} active={hl(3)} />
                   <line x1="280" y1="359" x2="280" y2="368" stroke={stroke(3)} />
                   <path
@@ -249,15 +253,17 @@ export function Mininode() {
         <Reveal delay={0.1}>
           <ul className="space-y-3">
             {t.mininode.parts.map((p, i) => (
-              <li
-                key={p.title}
-                {...hover(i)}
-                className={`flex gap-4 rounded-xl border p-4 transition-colors duration-200 ${
-                  hl(i)
-                    ? "border-pulse/40 bg-pulse/5"
-                    : "border-white/5 bg-white/[0.02]"
-                }`}
-              >
+              <li key={p.title}>
+                <button
+                  type="button"
+                  {...selectable(i)}
+                  aria-pressed={selected === i}
+                  className={`flex w-full cursor-pointer gap-4 rounded-xl border p-4 text-left transition-colors duration-200 ${
+                    hl(i)
+                      ? "border-pulse/40 bg-pulse/5"
+                      : "border-white/5 bg-white/[0.02]"
+                  }`}
+                >
                 <span
                   className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border font-mono text-[11px] transition-colors ${
                     hl(i)
@@ -273,11 +279,38 @@ export function Mininode() {
                   </h4>
                   <p className="mt-1 text-sm leading-relaxed text-mist">{p.body}</p>
                 </div>
+                </button>
               </li>
             ))}
           </ul>
         </Reveal>
       </div>
+
+      {/* Selected part detail — full-width panel under diagram + legend */}
+      <AnimatePresence mode="wait">
+        {selected !== null && (
+          <motion.div
+            key={selected}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.25 }}
+            className="glass mt-8 rounded-2xl border border-pulse/20 p-6 md:p-8"
+          >
+            <div className="flex items-center gap-3">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-pulse bg-pulse font-mono text-xs text-void">
+                {selected + 1}
+              </span>
+              <h4 className="font-display text-base font-medium tracking-wide text-frost">
+                {t.mininode.parts[selected].title}
+              </h4>
+            </div>
+            <p className="mt-3 max-w-3xl text-sm leading-relaxed text-mist md:text-base">
+              {t.mininode.parts[selected].detail}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </Section>
   );
 }

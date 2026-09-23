@@ -5,6 +5,10 @@ export interface DictTitled {
   body: string;
 }
 
+export interface DictPart extends DictTitled {
+  detail: string;
+}
+
 export interface DictLink {
   label: string;
   href: string;
@@ -100,7 +104,7 @@ export interface Dictionary {
     products: string[];
     upcoming: string[];
     comingSoon: string;
-    parts: DictTitled[];
+    parts: DictPart[];
   };
   developers: {
     label: string;

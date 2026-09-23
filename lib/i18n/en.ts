@@ -248,22 +248,32 @@ export const en: Dictionary = {
       {
         title: "Solar arrays",
         body: "Silicon-wing panels feed the power system through every orbit — sized for compute loads, not just housekeeping.",
+        detail:
+          "Dual deployable wings deliver sustained power through the full duty cycle — enough headroom to run CPU/GPU workloads continuously, not in bursts. Cell layout and wing area are sized around the compute envelope, so the payload never waits for charge.",
       },
       {
         title: "Compute module",
         body: "The MiniNode-01 core: onboard CPU/GPU with managed memory and storage. Your workload executes here.",
+        detail:
+          "A ruggedized CPU/GPU payload with managed memory and storage, isolated per workload. Jobs are scheduled, monitored and restarted by the platform — you ship code, the module runs it in orbit and hands back results.",
       },
       {
         title: "Satellite bus",
         body: "Structure, power distribution and thermal control — the platform that keeps the payload alive orbit after orbit.",
+        detail:
+          "A standard bus architecture handles structure, power distribution and thermal control autonomously. It absorbs the orbital environment — thermal cycling, radiation, eclipse — so the compute payload sees stable operating conditions.",
       },
       {
         title: "Comms",
         body: "S/X-band links to ground stations — telemetry and results down, workloads and updates up, inside every contact window.",
+        detail:
+          "S/X-band radios link the node to the ground-station network on every pass. Telemetry and results flow down, new workloads and software updates flow up — all inside the contact window, no permanent link required.",
       },
       {
         title: "ADCS",
         body: "Attitude determination and control — star trackers and reaction wheels keep the node stable and pointed.",
+        detail:
+          "Star trackers and reaction wheels hold precise attitude through each orbit — antenna pointed at ground stations during contacts, arrays at the Sun between them. Pointing is continuous and autonomous.",
       },
     ],
   },

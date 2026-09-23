@@ -1,22 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Orbit, Globe, ChevronDown, Satellite } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import type { Locale } from "@/lib/i18n/types";
 
 export function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { t, locale, setLocale } = useLanguage();
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  // Lock page scroll while the mobile menu is open — the menu behaves
+  // as a modal: the page behind must not move, and touch gestures on
+  // links can't be misread as scrolls (which would cancel navigation).
+  // Applied synchronously in the toggle (not an effect) so there's no
+  // gap where the page can still scroll. Locks documentElement — the
+  // actual document scroller.
+  const setMenuOpen = (v: boolean) => {
+    setOpen(v);
+    document.documentElement.style.overflow = v ? "hidden" : "";
+  };
 
   const links = [
     { href: "#platform", label: t.nav.platform },
@@ -26,28 +29,30 @@ export function Navbar() {
     { href: "#security", label: t.nav.security },
   ];
 
-  // Mobile menu links scroll explicitly — plain href anchors can be
-  // swallowed when an ancestor ends up as a scroll container on mobile.
+  // Mobile menu links scroll explicitly via scrollIntoView, deferred
+  // until the menu exit animation finishes — a smooth scroll still in
+  // flight when the menu unmounts gets cancelled mid-flight (reproduced
+  // in Firefox AND Chromium for far-away targets).
   const goTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
-    setOpen(false);
-    document
-      .getElementById(href.slice(1))
-      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    setMenuOpen(false);
+    window.setTimeout(() => {
+      document
+        .getElementById(href.slice(1))
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 300); // matches the 0.25s exit transition
   };
 
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? "glass border-b border-white/5"
-          : "border-b border-transparent bg-transparent"
-      }`}
-    >
-      <nav
-        className="container-site flex h-16 items-center justify-between"
-        aria-label="Main navigation"
-      >
+    <header className="fixed inset-x-0 top-0 z-50">
+      {/* glass lives on this wrapper, not <header> — backdrop-filter on an
+          ancestor makes it the containing block for fixed descendants and
+          would pin the menu backdrop to the header instead of the viewport */}
+      <div className="glass border-b border-white/5">
+        <nav
+          className="container-site flex h-16 items-center justify-between"
+          aria-label="Main navigation"
+        >
         <a
           href="#top"
           className="flex items-center gap-2.5 font-display text-sm font-semibold tracking-[0.18em] text-frost"
@@ -60,7 +65,7 @@ export function Navbar() {
           {/* Product dropdown */}
           <li className="group relative">
             <button
-              className="flex items-center gap-1 text-sm text-mist transition-colors hover:text-frost"
+              className="-mx-3 -my-1.5 flex items-center gap-1 whitespace-nowrap rounded-lg px-3 py-1.5 text-sm text-mist transition-all hover:bg-pulse/15 hover:text-frost"
               aria-haspopup="true"
             >
               {t.nav.product}
@@ -72,7 +77,7 @@ export function Navbar() {
                   <a
                     key={p.href + p.name}
                     href={p.href}
-                    className="flex items-start gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-white/5"
+                    className="flex items-start gap-3 rounded-lg px-3 py-2.5 transition-all hover:bg-pulse/15"
                   >
                     <Satellite className="mt-0.5 h-4 w-4 shrink-0 text-pulse" strokeWidth={1.5} />
                     <span>
@@ -88,7 +93,7 @@ export function Navbar() {
             <li key={l.href}>
               <a
                 href={l.href}
-                className="text-sm text-mist transition-colors hover:text-frost"
+                className="-mx-3 -my-1.5 whitespace-nowrap rounded-lg px-3 py-1.5 text-sm text-mist transition-all hover:bg-pulse/15 hover:text-frost"
               >
                 {l.label}
               </a>
@@ -100,7 +105,7 @@ export function Navbar() {
           <LanguageToggle locale={locale} setLocale={setLocale} />
           <a
             href="#contact"
-            className="rounded-full border border-pulse/40 bg-pulse/10 px-5 py-2 text-sm font-medium text-pulse transition-all hover:border-pulse/60 hover:bg-pulse/20"
+            className="whitespace-nowrap rounded-full border border-pulse/40 bg-pulse/10 px-5 py-2 text-sm font-medium text-pulse transition-all hover:border-pulse/60 hover:bg-pulse/20"
           >
             {t.nav.contact}
           </a>
@@ -110,23 +115,38 @@ export function Navbar() {
           <LanguageToggle locale={locale} setLocale={setLocale} compact />
           <button
             className="p-2 text-frost"
-            onClick={() => setOpen((v) => !v)}
+            onClick={() => setMenuOpen(!open)}
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
           >
             {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
-      </nav>
+        </nav>
+      </div>
 
       <AnimatePresence>
+        {/* Backdrop — tapping outside the menu closes it */}
         {open && (
           <motion.div
+            key="menu-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-x-0 bottom-0 top-16 bg-void/70 backdrop-blur-sm lg:hidden"
+            onClick={() => setMenuOpen(false)}
+            aria-hidden="true"
+          />
+        )}
+        {open && (
+          <motion.div
+            key="menu-panel"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25 }}
-            className="glass max-h-[calc(100dvh-4rem)] overflow-y-auto lg:hidden"
+            className="glass relative max-h-[calc(100dvh-4rem)] overflow-y-auto lg:hidden"
           >
             <ul className="container-site flex flex-col gap-1 py-4">
               {/* Product group */}
@@ -139,7 +159,7 @@ export function Navbar() {
                     key={p.href + p.name}
                     href={p.href}
                     onClick={(e) => goTo(e, p.href)}
-                    className="block rounded-lg py-2.5 pl-6 pr-3 text-base text-mist transition-colors hover:bg-white/5 hover:text-frost"
+                    className="block rounded-lg border-l-2 border-transparent py-2.5 pl-6 pr-3 text-base text-mist transition-all hover:border-pulse hover:bg-pulse/15 hover:text-frost active:border-pulse active:bg-pulse/25 active:text-frost"
                   >
                     {p.name}
                   </a>
@@ -150,7 +170,7 @@ export function Navbar() {
                   <a
                     href={l.href}
                     onClick={(e) => goTo(e, l.href)}
-                    className="block rounded-lg px-3 py-3 text-base text-mist transition-colors hover:bg-white/5 hover:text-frost"
+                    className="block rounded-lg border-l-2 border-transparent px-3 py-3 text-base text-mist transition-all hover:border-pulse hover:bg-pulse/15 hover:text-frost active:border-pulse active:bg-pulse/25 active:text-frost"
                   >
                     {l.label}
                   </a>
@@ -160,7 +180,7 @@ export function Navbar() {
                 <a
                   href="#contact"
                   onClick={(e) => goTo(e, "#contact")}
-                  className="block rounded-full border border-pulse/40 bg-pulse/10 px-5 py-3 text-center text-sm font-medium text-pulse"
+                  className="block rounded-full border border-pulse/40 bg-pulse/10 px-5 py-3 text-center text-sm font-medium text-pulse transition-all hover:border-pulse/70 hover:bg-pulse/20 active:bg-pulse/30"
                 >
                   {t.nav.contact}
                 </a>

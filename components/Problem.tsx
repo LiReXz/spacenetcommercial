@@ -110,7 +110,7 @@ export function Problem() {
             <div className="relative ml-2 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-pulse/30 bg-night/60">
               <Globe className="h-4 w-4 text-pulse/80" strokeWidth={1.5} />
               <span className="absolute inset-0 animate-pulse-soft rounded-full border border-pulse/20" />
-              <span className="absolute left-1/2 top-full mt-1.5 -translate-x-1/2 whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.15em] text-pulse/70">
+              <span className="absolute left-1/2 top-full mt-1.5 w-20 -translate-x-1/2 text-center font-mono text-[9px] uppercase leading-snug tracking-[0.15em] text-pulse/70">
                 {t.problem.toEarth}
               </span>
             </div>

@@ -35,6 +35,25 @@ test.describe("mobile menu (390px)", () => {
       page.getByRole("button", { name: "Open menu" })
     ).toBeVisible();
   });
+
+  test("page is not scrollable while menu is open", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: "Open menu" }).click();
+    await page.mouse.move(195, 400);
+    await page.mouse.wheel(0, 800);
+    await page.waitForTimeout(300);
+    expect(await page.evaluate(() => window.scrollY)).toBe(0);
+  });
+
+  test("tapping outside the menu closes it", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: "Open menu" }).click();
+    // Backdrop is exposed below the menu panel
+    await page.mouse.click(195, 820);
+    await expect(
+      page.getByRole("button", { name: "Open menu" })
+    ).toBeVisible();
+  });
 });
 
 test.describe("desktop nav (1280px)", () => {
@@ -48,6 +67,15 @@ test.describe("desktop nav (1280px)", () => {
       .click();
     await expect(page.locator("#platform")).toBeInViewport({ timeout: 8000 });
   });
+});
+
+test("no horizontal overflow at mobile width", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - window.innerWidth
+  );
+  expect(overflow).toBeLessThanOrEqual(0);
 });
 
 test("every in-page #href resolves to an existing element", async ({

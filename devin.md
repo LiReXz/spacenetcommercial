@@ -86,3 +86,4 @@ components/
 
 - **Keep this file in sync automatically**: whenever structure, stack, branding, design tokens or conventions change, update `devin.md` in the same change — no need to be asked
 - Only restructure or rewrite this file when explicitly requested
+- **Never run `git push` unless the user explicitly asks for it** — commits are fine, pushes are not
