@@ -32,7 +32,6 @@ export interface Dictionary {
   nav: {
     platform: string;
     product: string;
-    productItems: { name: string; desc: string; href: string }[];
     technology: string;
     useCases: string;
     developers: string;
@@ -101,9 +100,10 @@ export interface Dictionary {
     title: string;
     subtitle: string;
     caption: string;
-    products: string[];
-    upcoming: string[];
+    modelsLabel: string;
+    models: { name: string; available: boolean }[];
     comingSoon: string;
+    soonNote: string;
     parts: DictPart[];
   };
   developers: {
@@ -132,9 +132,18 @@ export interface Dictionary {
     label: string;
     title: string;
     subtitle: string;
-    pilot: { title: string; body: string; button: string };
+    meeting: {
+      title: string;
+      body: string;
+      button: string;
+      pickTime: string;
+      confirm: string;
+      emailSubject: string;
+      emailBody: string;
+    };
     partners: { title: string; body: string };
     form: {
+      title: string;
       ariaLabel: string;
       name: string;
       email: string;
@@ -144,6 +153,7 @@ export interface Dictionary {
       submit: string;
       sending: string;
       privacyNote: string;
+      mailtoSubject: string;
       placeholders: { name: string; email: string; company: string; message: string };
       interests: string[];
       errors: { name: string; email: string; message: string };

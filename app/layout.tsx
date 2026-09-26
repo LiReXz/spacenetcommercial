@@ -1,5 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { LanguageProvider } from "@/lib/i18n/LanguageProvider";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 import "./globals.css";
 
 const inter = Inter({
@@ -53,7 +56,11 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
       >
-        {children}
+        <LanguageProvider>
+          <Navbar />
+          {children}
+          <Footer />
+        </LanguageProvider>
       </body>
     </html>
   );

@@ -42,9 +42,9 @@ export function Problem() {
 
       {/* Data funnel visual */}
       <Reveal className="mx-auto mt-14 max-w-4xl" delay={0.1}>
-        <div className="relative mx-auto flex h-40 max-w-2xl items-center justify-center">
+        <div className="relative mx-auto flex h-48 max-w-3xl items-center justify-center">
           {/* Raw data streams — particles flow into the compute node */}
-          {[38, 50, 62].map((top, li) => (
+          {[30, 43, 57, 70].map((top, li) => (
             <div
               key={li}
               className="absolute left-0 w-[38%]"
@@ -115,10 +115,10 @@ export function Problem() {
               </span>
             </div>
           </div>
-          <span className="absolute left-[6%] top-[26%] font-mono text-[10px] uppercase tracking-[0.15em] text-mist/60">
+          <span className="absolute left-[4%] top-[18%] font-mono text-[10px] uppercase tracking-[0.15em] text-mist/60">
             {t.problem.raw}
           </span>
-          <span className="absolute right-[14%] top-[26%] font-mono text-[10px] uppercase tracking-[0.15em] text-pulse/80">
+          <span className="absolute right-[12%] top-[18%] font-mono text-[10px] uppercase tracking-[0.15em] text-pulse/80">
             {t.problem.results}
           </span>
         </div>

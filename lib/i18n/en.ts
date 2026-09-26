@@ -4,9 +4,7 @@ export const en: Dictionary = {
   nav: {
     platform: "Platform",
     product: "Product",
-    productItems: [
-      { name: "MiniNode-01", desc: "Orbital compute node", href: "#mininode" },
-    ],
+
     technology: "Technology",
     useCases: "Use Cases",
     developers: "Developers",
@@ -17,7 +15,7 @@ export const en: Dictionary = {
     eyebrow: "Orbital Computing-as-a-Service",
     title: "Compute beyond Earth.",
     subtitle:
-      "Deploy your software on orbital computing infrastructure. Process spaceborne data closer to where it is generated — without building your own space infrastructure.",
+      "Process data from your constellation on our orbital compute node — running software you develop, on infrastructure we operate.",
     primary: "Explore the platform",
     secondary: "Talk to our team",
     scrollAria: "Scroll to next section",
@@ -53,7 +51,7 @@ export const en: Dictionary = {
     blocks: [
       {
         title: "Process closer to the source",
-        body: "Run computation where the data is generated. Onboard CPU/GPU resources let your software operate on spaceborne data in orbit.",
+        body: "Run computation on a dedicated compute node in orbit — not on each spacecraft. Your software works on data from the rest of your constellation without waiting for a ground pass.",
       },
       {
         title: "Reduce unnecessary data transfers",
@@ -69,7 +67,7 @@ export const en: Dictionary = {
     label: "Platform overview",
     title: "Your software is just the beginning.",
     subtitle:
-      "Today you deploy your workloads on our orbital infrastructure — validation, deployment, execution environment, resource management, telemetry and results delivery. Tomorrow, the platform grows with you.",
+      "You develop the processing software — it runs on our MiniNode compute node, working over data relayed from your satellites. The platform covers validation, deployment, execution, resource management, telemetry and results delivery — and grows with you.",
     stages: [
       {
         tag: "INPUT",
@@ -94,7 +92,7 @@ export const en: Dictionary = {
       {
         tag: "DATA PROCESSING",
         name: "Run customer-defined workloads",
-        desc: "Controlled access to input data. Your software performs the mission-specific processing.",
+        desc: "Data from your spacecraft is delivered to the node for processing. Your software performs the mission-specific work.",
       },
       {
         tag: "RESULTS",
@@ -120,18 +118,13 @@ export const en: Dictionary = {
       },
       {
         phase: "Next",
-        title: "Bring your own models",
-        body: "Upload and execute your own models on the satellite's GPU.",
+        title: "The orbital datacenter",
+        body: "MiniNode scales into shared, multi-tenant compute — a mesh of nodes in orbit serving many constellations.",
       },
       {
         phase: "Later",
-        title: "Software catalog",
-        body: "Ready-made workloads you can deploy without developing your own.",
-      },
-      {
-        phase: "Future",
-        title: "Model catalog",
-        body: "Pre-built models organized by purpose, ready to run in orbit.",
+        title: "Catalogs",
+        body: "Ready-made workloads and pre-built models you can run in orbit without developing your own.",
       },
       {
         phase: "Beyond",
@@ -239,11 +232,16 @@ export const en: Dictionary = {
     label: "The hardware",
     title: "Meet MiniNode-01.",
     subtitle:
-      "A compute node in orbit — a standard satellite bus carrying a ruggedized CPU/GPU payload. This is where your software runs.",
+      "A compute node in orbit — a standard satellite bus carrying a ruggedized CPU/GPU payload. This is where your software runs, processing data from the rest of your constellation.",
     caption: "Exploded concept view — illustrative, not to scale",
-    products: ["MiniNode-01"],
-    upcoming: ["MiniNode-02"],
+    modelsLabel: "Node",
+    models: [
+      { name: "MiniNode-01", available: true },
+      { name: "MiniNode-02", available: false },
+      { name: "MiniNode-03", available: false },
+    ],
     comingSoon: "Soon",
+    soonNote: "In development — specs and availability will be published here.",
     parts: [
       {
         title: "Solar arrays",
@@ -373,16 +371,22 @@ export const en: Dictionary = {
     title: "Ready to bring computing to orbit?",
     subtitle:
       "Whether you're building space infrastructure, developing orbital applications or exploring new ways to process spaceborne data — let's talk.",
-    pilot: {
-      title: "Discuss a pilot mission",
-      body: "Exploring a concrete use case? Tell us about your data profile and processing needs — we'll assess workload compatibility together.",
-      button: "Start with a pilot",
+    meeting: {
+      title: "Schedule a meeting",
+      body: "Want to know if our product fits your constellation — or have questions you'd rather talk through live? Pick a date and time and we'll send you a calendar invite.",
+      button: "Pick a date & time",
+      pickTime: "Available times",
+      confirm: "Send request",
+      emailSubject: "Meeting request",
+      emailBody:
+        "Hi! I'd like to schedule a meeting:\n\n{slot}\n\nName: {name}\nEmail: {email}\nCompany: {company}\nTopic: {interest}\n\n{message}",
     },
     partners: {
       title: "Partnerships & investment",
-      body: "We work with satellite operators, technology partners and investors building the next layer of space infrastructure.",
+      body: "We're an early-stage, founder-funded team — open to conversations with satellite operators, technology partners and investors.",
     },
     form: {
+      title: "Have questions?",
       ariaLabel: "Contact form",
       name: "Name *",
       email: "Work email *",
@@ -392,6 +396,7 @@ export const en: Dictionary = {
       submit: "Contact our team",
       sending: "Sending…",
       privacyNote: "We'll only use your details to respond to your inquiry.",
+      mailtoSubject: "SpaceNet — contact form",
       placeholders: {
         name: "Jane Doe",
         email: "jane@company.com",
@@ -399,10 +404,8 @@ export const en: Dictionary = {
         message: "Tell us about your use case, data profile or mission…",
       },
       interests: [
-        "Deploy a workload",
-        "Satellite operator partnership",
-        "Technology partnership",
-        "Pilot mission",
+        "Process satellite data in orbit",
+        "Partnership or collaboration",
         "Investment",
         "Other",
       ],
@@ -425,24 +428,24 @@ export const en: Dictionary = {
       {
         title: "Platform",
         links: [
-          { label: "Overview", href: "#platform" },
-          { label: "Forge", href: "#products" },
-          { label: "Helm", href: "#products" },
-          { label: "MiniNode-01", href: "#mininode" },
+          { label: "Overview", href: "/platform" },
+          { label: "Forge", href: "/product#forge" },
+          { label: "Helm", href: "/product#helm" },
+          { label: "MiniNode-01", href: "/product#mininode" },
         ],
       },
       {
         title: "Company",
         links: [
-          { label: "Technology", href: "#technology" },
-          { label: "Use Cases", href: "#use-cases" },
-          { label: "Security", href: "#security" },
+          { label: "Technology", href: "/technology" },
+          { label: "Use Cases", href: "/use-cases" },
+          { label: "Security", href: "/security" },
         ],
       },
       {
         title: "Resources",
         links: [
-          { label: "Developers", href: "#developers" },
+          { label: "Developers", href: "/developers" },
           { label: "Contact", href: "#contact" },
           { label: "LinkedIn", href: "https://www.linkedin.com", external: true },
         ],

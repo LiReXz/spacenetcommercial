@@ -25,7 +25,7 @@ export function ProductSuite() {
       subtitle={t.products.subtitle}
     >
       <div className="mt-16 grid gap-10 lg:grid-cols-2">
-        <Reveal>
+        <Reveal id="forge">
           <ProductCard
             icon={TerminalSquare}
             name={t.products.dev.name}
@@ -36,7 +36,7 @@ export function ProductSuite() {
             mockup={<ForgeMockup />}
           />
         </Reveal>
-        <Reveal delay={0.12}>
+        <Reveal delay={0.12} id="helm">
           <ProductCard
             icon={Satellite}
             name={t.products.ops.name}

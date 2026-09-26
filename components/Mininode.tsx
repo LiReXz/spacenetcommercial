@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
+import { Satellite } from "lucide-react";
 import { Section } from "./Section";
+import { Select } from "./Select";
 import { Reveal } from "./Reveal";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 
@@ -74,6 +76,8 @@ export function Mininode() {
   // detail panel below. Clicking a part (or its legend card) toggles it.
   const [hovered, setHovered] = useState<number | null>(null);
   const [selected, setSelected] = useState<number | null>(null);
+  // Which MiniNode model is shown — index into t.mininode.models
+  const [modelIdx, setModelIdx] = useState(0);
 
   const hl = (i: number) => hovered === i || selected === i;
   const stroke = (i: number) => (hl(i) ? "#22d3ee" : "#64748b");
@@ -90,28 +94,58 @@ export function Mininode() {
       title={t.mininode.title}
       subtitle={t.mininode.subtitle}
     >
-      {/* Product selector — scales as more nodes launch */}
+      {/* Node selector — which MiniNode model is shown below */}
       <Reveal>
-        <div className="mt-10 flex flex-wrap items-center gap-3">
-          {t.mininode.products.map((p) => (
-            <span
-              key={p}
-              className="rounded-full border border-pulse/50 bg-pulse/10 px-4 py-1.5 font-mono text-xs tracking-wide text-pulse"
-            >
-              {p}
-            </span>
-          ))}
-          {t.mininode.upcoming.map((p) => (
-            <span
-              key={p}
-              className="rounded-full border border-dashed border-steel/50 px-4 py-1.5 font-mono text-xs tracking-wide text-mist/50"
-            >
-              {p} · {t.mininode.comingSoon}
-            </span>
-          ))}
+        <div className="mt-10 flex items-center gap-3">
+          <span
+            id="mininode-model-label"
+            className="font-mono text-[10px] uppercase tracking-[0.2em] text-mist/60"
+          >
+            {t.mininode.modelsLabel}
+          </span>
+          <Select
+            id="mininode-model"
+            labelId="mininode-model-label"
+            value={t.mininode.models[modelIdx].name}
+            onChange={(name) => {
+              const i = t.mininode.models.findIndex((m) => m.name === name);
+              if (i >= 0) {
+                setModelIdx(i);
+                setSelected(null);
+                setHovered(null);
+              }
+            }}
+            options={t.mininode.models.map((m) => ({
+              label: m.name,
+              hint: m.available ? undefined : t.mininode.comingSoon,
+            }))}
+            className="rounded-full border border-pulse/40 bg-pulse/10 py-1.5 pl-4 pr-3 font-mono text-xs tracking-wide text-pulse transition-colors hover:border-pulse/60"
+          />
         </div>
       </Reveal>
 
+      {!t.mininode.models[modelIdx].available && (
+        <Reveal className="mt-12">
+          <div className="hairline rounded-2xl border border-dashed border-steel/40 bg-night/20 px-8 py-16 text-center">
+            <Satellite
+              className="mx-auto h-8 w-8 text-mist/40"
+              strokeWidth={1.5}
+            />
+            <h4 className="mt-4 font-display text-lg font-medium text-frost">
+              {t.mininode.models[modelIdx].name}
+            </h4>
+            <p className="mt-2 text-sm text-mist/70">{t.mininode.soonNote}</p>
+          </div>
+        </Reveal>
+      )}
+
+      {t.mininode.models[modelIdx].available && (
+        <motion.div
+          key={modelIdx}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, ease: [0.21, 0.65, 0.35, 1] }}
+        >
       <div className="mt-12 grid items-center gap-12 lg:grid-cols-2">
         {/* Diagram */}
         <Reveal>
@@ -291,10 +325,10 @@ export function Mininode() {
         {selected !== null && (
           <motion.div
             key={selected}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.25 }}
+            initial={{ opacity: 0, y: 24, filter: "blur(6px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            exit={{ opacity: 0, y: -12, filter: "blur(4px)" }}
+            transition={{ duration: 0.55, ease: [0.21, 0.65, 0.35, 1] }}
             className="glass mt-8 rounded-2xl border border-pulse/20 p-6 md:p-8"
           >
             <div className="flex items-center gap-3">
@@ -311,6 +345,8 @@ export function Mininode() {
           </motion.div>
         )}
       </AnimatePresence>
+        </motion.div>
+      )}
     </Section>
   );
 }

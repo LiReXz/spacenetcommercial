@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { OrbitalScene } from "./OrbitalScene";
@@ -68,13 +69,13 @@ export function Hero() {
           animate="visible"
           className="mt-10 flex flex-col items-center gap-4 sm:flex-row"
         >
-          <a
-            href="#platform"
+          <Link
+            href="/platform"
             className="group inline-flex items-center gap-2 rounded-full bg-pulse px-7 py-3.5 text-sm font-semibold text-void transition-all hover:bg-ion hover:shadow-[0_0_32px_rgba(34,211,238,0.35)]"
           >
             {t.hero.primary}
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-          </a>
+          </Link>
           <a
             href="#contact"
             className="inline-flex items-center gap-2 rounded-full border border-white/15 px-7 py-3.5 text-sm font-medium text-frost transition-all hover:border-white/30 hover:bg-white/5"

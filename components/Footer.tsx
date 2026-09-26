@@ -1,6 +1,7 @@
 "use client";
 
-import { Orbit, Linkedin } from "lucide-react";
+import Link from "next/link";
+import { Orbit } from "lucide-react"; // re-add `Linkedin` when restoring the social link below
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 
 export function Footer() {
@@ -11,18 +12,19 @@ export function Footer() {
       <div className="container-site py-14">
         <div className="grid gap-10 md:grid-cols-[1.4fr_repeat(3,1fr)]">
           <div>
-            <a
-              href="#top"
+            <Link
+              href="/"
               className="flex items-center gap-2.5 font-display text-sm font-semibold tracking-[0.18em] text-frost"
             >
               <Orbit className="h-5 w-5 text-pulse" strokeWidth={1.5} />
               SpaceNet
-            </a>
+            </Link>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-mist">
               {t.footer.tagline}
             </p>
+            {/* Social link — restore once a real SpaceNet LinkedIn page exists
             <a
-              href="https://www.linkedin.com"
+              href="https://www.linkedin.com/company/TODO"
               target="_blank"
               rel="noopener noreferrer"
               aria-label={t.footer.linkedinAria}
@@ -30,6 +32,7 @@ export function Footer() {
             >
               <Linkedin className="h-4 w-4" />
             </a>
+            */}
           </div>
 
           {t.footer.columns.map((col) => (
@@ -40,15 +43,23 @@ export function Footer() {
               <ul className="mt-4 space-y-2.5">
                 {col.links.map((l) => (
                   <li key={l.label}>
-                    <a
-                      href={l.href}
-                      {...(l.external
-                        ? { target: "_blank", rel: "noopener noreferrer" }
-                        : {})}
-                      className="text-sm text-mist transition-colors hover:text-frost"
-                    >
-                      {l.label}
-                    </a>
+                    {l.external ? (
+                      <a
+                        href={l.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-mist transition-colors hover:text-frost"
+                      >
+                        {l.label}
+                      </a>
+                    ) : (
+                      <Link
+                        href={l.href}
+                        className="text-sm text-mist transition-colors hover:text-frost"
+                      >
+                        {l.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -60,14 +71,16 @@ export function Footer() {
           <p className="text-xs text-mist/50">
             © {new Date().getFullYear()} SpaceNet. {t.footer.rights}
           </p>
+          {/* Legal links — restore when /privacy and /legal exist
           <div className="flex gap-6">
-            <a href="#" className="text-xs text-mist/50 transition-colors hover:text-mist">
+            <Link href="/privacy" className="text-xs text-mist/50 transition-colors hover:text-mist">
               {t.footer.privacy}
-            </a>
-            <a href="#" className="text-xs text-mist/50 transition-colors hover:text-mist">
+            </Link>
+            <Link href="/legal" className="text-xs text-mist/50 transition-colors hover:text-mist">
               {t.footer.legal}
-            </a>
+            </Link>
           </div>
+          */}
         </div>
       </div>
     </footer>

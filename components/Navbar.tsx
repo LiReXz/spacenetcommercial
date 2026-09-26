@@ -1,14 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Orbit, Globe, ChevronDown, Satellite } from "lucide-react";
+import { Menu, X, Orbit, Globe } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import type { Locale } from "@/lib/i18n/types";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const { t, locale, setLocale } = useLanguage();
+  const pathname = usePathname();
 
   // Lock page scroll while the mobile menu is open — the menu behaves
   // as a modal: the page behind must not move, and touch gestures on
@@ -22,18 +25,24 @@ export function Navbar() {
   };
 
   const links = [
-    { href: "#platform", label: t.nav.platform },
-    { href: "#technology", label: t.nav.technology },
-    { href: "#use-cases", label: t.nav.useCases },
-    { href: "#developers", label: t.nav.developers },
-    { href: "#security", label: t.nav.security },
+    { href: "/product", label: t.nav.product },
+    { href: "/platform", label: t.nav.platform },
+    { href: "/technology", label: t.nav.technology },
+    { href: "/use-cases", label: t.nav.useCases },
+    { href: "/developers", label: t.nav.developers },
+    { href: "/security", label: t.nav.security },
   ];
 
-  // Mobile menu links scroll explicitly via scrollIntoView, deferred
-  // until the menu exit animation finishes — a smooth scroll still in
-  // flight when the menu unmounts gets cancelled mid-flight (reproduced
-  // in Firefox AND Chromium for far-away targets).
+  // Pure-hash links (#contact) scroll in place — every page renders the
+  // contact section. Path links navigate via <Link>; either way the menu
+  // closes. Hash scroll is deferred until the menu exit animation finishes
+  // — a smooth scroll still in flight when the menu unmounts gets
+  // cancelled mid-flight (reproduced in Firefox AND Chromium).
   const goTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (!href.startsWith("#")) {
+      setMenuOpen(false);
+      return;
+    }
     e.preventDefault();
     setMenuOpen(false);
     window.setTimeout(() => {
@@ -42,6 +51,11 @@ export function Navbar() {
         ?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 300); // matches the 0.25s exit transition
   };
+
+  const linkCls = (href: string) =>
+    `-mx-3 -my-1.5 whitespace-nowrap rounded-lg px-3 py-1.5 text-sm transition-all hover:bg-pulse/15 hover:text-frost ${
+      pathname === href ? "bg-pulse/10 text-frost" : "text-mist"
+    }`;
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
@@ -53,50 +67,24 @@ export function Navbar() {
           className="container-site flex h-16 items-center justify-between"
           aria-label="Main navigation"
         >
-        <a
-          href="#top"
+        <Link
+          href="/"
           className="flex items-center gap-2.5 font-display text-sm font-semibold tracking-[0.18em] text-frost"
         >
           <Orbit className="h-5 w-5 text-pulse" strokeWidth={1.5} />
           SpaceNet
-        </a>
+        </Link>
 
         <ul className="hidden items-center gap-8 lg:flex">
-          {/* Product dropdown */}
-          <li className="group relative">
-            <button
-              className="-mx-3 -my-1.5 flex items-center gap-1 whitespace-nowrap rounded-lg px-3 py-1.5 text-sm text-mist transition-all hover:bg-pulse/15 hover:text-frost"
-              aria-haspopup="true"
-            >
-              {t.nav.product}
-              <ChevronDown className="h-3.5 w-3.5 transition-transform duration-200 group-hover:rotate-180" />
-            </button>
-            <div className="invisible absolute left-1/2 top-full -translate-x-1/2 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
-              <div className="glass w-64 rounded-xl p-2 shadow-[0_16px_48px_rgba(0,0,0,0.5)]">
-                {t.nav.productItems.map((p) => (
-                  <a
-                    key={p.href + p.name}
-                    href={p.href}
-                    className="flex items-start gap-3 rounded-lg px-3 py-2.5 transition-all hover:bg-pulse/15"
-                  >
-                    <Satellite className="mt-0.5 h-4 w-4 shrink-0 text-pulse" strokeWidth={1.5} />
-                    <span>
-                      <span className="block text-sm font-medium text-frost">{p.name}</span>
-                      <span className="mt-0.5 block text-xs text-mist">{p.desc}</span>
-                    </span>
-                  </a>
-                ))}
-              </div>
-            </div>
-          </li>
           {links.map((l) => (
             <li key={l.href}>
-              <a
+              <Link
                 href={l.href}
-                className="-mx-3 -my-1.5 whitespace-nowrap rounded-lg px-3 py-1.5 text-sm text-mist transition-all hover:bg-pulse/15 hover:text-frost"
+                aria-current={pathname === l.href ? "page" : undefined}
+                className={linkCls(l.href)}
               >
                 {l.label}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
@@ -149,31 +137,18 @@ export function Navbar() {
             className="glass relative max-h-[calc(100dvh-4rem)] overflow-y-auto lg:hidden"
           >
             <ul className="container-site flex flex-col gap-1 py-4">
-              {/* Product group */}
-              <li>
-                <p className="px-3 pb-1 pt-2 font-mono text-[10px] uppercase tracking-[0.2em] text-mist/50">
-                  {t.nav.product}
-                </p>
-                {t.nav.productItems.map((p) => (
-                  <a
-                    key={p.href + p.name}
-                    href={p.href}
-                    onClick={(e) => goTo(e, p.href)}
-                    className="block rounded-lg border-l-2 border-transparent py-2.5 pl-6 pr-3 text-base text-mist transition-all hover:border-pulse hover:bg-pulse/15 hover:text-frost active:border-pulse active:bg-pulse/25 active:text-frost"
-                  >
-                    {p.name}
-                  </a>
-                ))}
-              </li>
               {links.map((l) => (
                 <li key={l.href}>
-                  <a
+                  <Link
                     href={l.href}
                     onClick={(e) => goTo(e, l.href)}
-                    className="block rounded-lg border-l-2 border-transparent px-3 py-3 text-base text-mist transition-all hover:border-pulse hover:bg-pulse/15 hover:text-frost active:border-pulse active:bg-pulse/25 active:text-frost"
+                    aria-current={pathname === l.href ? "page" : undefined}
+                    className={`block rounded-lg border-l-2 border-transparent px-3 py-3 text-base transition-all hover:border-pulse hover:bg-pulse/15 hover:text-frost active:border-pulse active:bg-pulse/25 active:text-frost ${
+                      pathname === l.href ? "border-pulse/60 text-frost" : "text-mist"
+                    }`}
                   >
                     {l.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
               <li className="pt-2">

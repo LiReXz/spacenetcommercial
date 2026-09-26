@@ -1,10 +1,13 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { ArrowRight, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import { ArrowRight, CheckCircle2, AlertCircle, Loader2, CalendarDays } from "lucide-react";
 import { Section } from "./Section";
 import { Reveal } from "./Reveal";
+import { MeetingScheduler } from "./MeetingScheduler";
+import { Select } from "./Select";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
+import { CONTACT_EMAIL } from "@/lib/contact";
 
 type Status = "idle" | "submitting" | "success";
 
@@ -31,6 +34,7 @@ export function FinalCTA() {
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>(
     {}
   );
+  const [schedulerOpen, setSchedulerOpen] = useState(false);
 
   function validate(): boolean {
     const next: typeof errors = {};
@@ -47,8 +51,36 @@ export function FinalCTA() {
     e.preventDefault();
     if (!validate()) return;
     setStatus("submitting");
-    // Simulated submission — wire to your CRM/API endpoint here.
-    await new Promise((r) => setTimeout(r, 1200));
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json().catch(() => null);
+      if (res.ok && data?.delivered) {
+        setStatus("success");
+        return;
+      }
+    } catch {
+      /* fall through to the mailto draft */
+    }
+    // Resend isn't configured yet — hand the composed message to the
+    // visitor's mail client so it still arrives. Skipped until
+    // CONTACT_EMAIL is set.
+    if (CONTACT_EMAIL) {
+      const lines = [
+        `${t.cta.form.name.replace(/\s*\*$/, "")}: ${form.name}`,
+        `${t.cta.form.email.replace(/\s*\*$/, "")}: ${form.email}`,
+        `${t.cta.form.company}: ${form.company || "—"}`,
+        `${t.cta.form.interest}: ${form.interest}`,
+        "",
+        form.message,
+      ];
+      window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
+        t.cta.form.mailtoSubject
+      )}&body=${encodeURIComponent(lines.join("\n"))}`;
+    }
     setStatus("success");
   }
 
@@ -63,6 +95,7 @@ export function FinalCTA() {
       label={t.cta.label}
       title={t.cta.title}
       subtitle={t.cta.subtitle}
+      className="pt-12 md:pt-16 pb-14 md:pb-20"
     >
       <div className="mx-auto mt-14 grid max-w-5xl gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-start">
         {/* Left: pitch + secondary CTA */}
@@ -70,19 +103,17 @@ export function FinalCTA() {
           <div className="space-y-6">
             <div className="hairline rounded-2xl bg-night/30 p-7">
               <h3 className="font-display text-lg font-medium text-frost">
-                {t.cta.pilot.title}
+                {t.cta.meeting.title}
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-mist">
-                {t.cta.pilot.body}
+                {t.cta.meeting.body}
               </p>
               <button
-                onClick={() => {
-                  setForm((f) => ({ ...f, interest: interests[3] }));
-                  document.getElementById("contact-message")?.focus();
-                }}
+                onClick={() => setSchedulerOpen(true)}
                 className="group mt-5 inline-flex items-center gap-2 text-sm font-medium text-pulse transition-colors hover:text-ion"
               >
-                {t.cta.pilot.button}
+                <CalendarDays className="h-4 w-4" strokeWidth={1.5} />
+                {t.cta.meeting.button}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </button>
             </div>
@@ -133,6 +164,9 @@ export function FinalCTA() {
               </div>
             ) : (
               <>
+                <h3 className="mb-5 font-display text-lg font-medium text-frost">
+                  {t.cta.form.title}
+                </h3>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
                     <label htmlFor="contact-name" className="mb-1.5 block text-xs font-medium text-mist">
@@ -195,23 +229,19 @@ export function FinalCTA() {
                     />
                   </div>
                   <div>
-                    <label htmlFor="contact-interest" className="mb-1.5 block text-xs font-medium text-mist">
+                    <label id="contact-interest-label" className="mb-1.5 block text-xs font-medium text-mist">
                       {t.cta.form.interest}
                     </label>
-                    <select
+                    <Select
                       id="contact-interest"
+                      labelId="contact-interest-label"
                       value={form.interest}
-                      onChange={(e) =>
-                        setForm((f) => ({ ...f, interest: e.target.value }))
+                      onChange={(v) =>
+                        setForm((f) => ({ ...f, interest: v }))
                       }
-                      className={`${inputCls("interest")} appearance-none`}
-                    >
-                      {interests.map((i) => (
-                        <option key={i} value={i} className="bg-night">
-                          {i}
-                        </option>
-                      ))}
-                    </select>
+                      options={interests.map((i) => ({ label: i }))}
+                      className={inputCls("interest")}
+                    />
                   </div>
                 </div>
 
@@ -262,6 +292,10 @@ export function FinalCTA() {
           </form>
         </Reveal>
       </div>
+      <MeetingScheduler
+        open={schedulerOpen}
+        onClose={() => setSchedulerOpen(false)}
+      />
     </Section>
   );
 }

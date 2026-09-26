@@ -4,9 +4,7 @@ export const es: Dictionary = {
   nav: {
     platform: "Plataforma",
     product: "Producto",
-    productItems: [
-      { name: "MiniNode-01", desc: "Nodo de computación orbital", href: "#mininode" },
-    ],
+
     technology: "Tecnología",
     useCases: "Casos de uso",
     developers: "Developers",
@@ -17,7 +15,7 @@ export const es: Dictionary = {
     eyebrow: "Orbital Computing-as-a-Service",
     title: "Computación más allá de la Tierra.",
     subtitle:
-      "Despliega tu software en infraestructura de computación orbital. Procesa datos generados en el espacio cerca de donde se originan — sin construir tu propia infraestructura espacial.",
+      "Procesa los datos de tu constelación en nuestro nodo de computación orbital — ejecutando el software que desarrollas, sobre infraestructura que operamos nosotros.",
     primary: "Explora la plataforma",
     secondary: "Habla con nuestro equipo",
     scrollAria: "Ir a la siguiente sección",
@@ -53,7 +51,7 @@ export const es: Dictionary = {
     blocks: [
       {
         title: "Procesa cerca de la fuente",
-        body: "Ejecuta la computación donde se generan los datos. Los recursos CPU/GPU a bordo permiten que tu software opere sobre datos espaciales en órbita.",
+        body: "Ejecuta la computación en un nodo dedicado en órbita — no en cada satélite. Tu software trabaja sobre los datos del resto de tu constelación sin esperar a la siguiente ventana de contacto.",
       },
       {
         title: "Reduce transferencias innecesarias",
@@ -69,7 +67,7 @@ export const es: Dictionary = {
     label: "Visión de la plataforma",
     title: "Tu software es solo el comienzo.",
     subtitle:
-      "Hoy despliegas tus workloads en nuestra infraestructura orbital — validación, despliegue, entorno de ejecución, gestión de recursos, telemetría y entrega de resultados. Mañana, la plataforma crece contigo.",
+      "Desarrollas el software de procesamiento — se ejecuta en nuestro nodo de computación MiniNode, sobre los datos que llegan de tus satélites. La plataforma cubre validación, despliegue, ejecución, gestión de recursos, telemetría y entrega de resultados — y crece contigo.",
     stages: [
       {
         tag: "ENTRADA",
@@ -94,7 +92,7 @@ export const es: Dictionary = {
       {
         tag: "PROCESAMIENTO",
         name: "Ejecuta workloads definidos por el cliente",
-        desc: "Acceso controlado a los datos de entrada. Tu software realiza el procesamiento específico de la misión.",
+        desc: "Los datos de tus satélites se entregan al nodo para su procesamiento. Tu software realiza el trabajo específico de la misión.",
       },
       {
         tag: "RESULTADOS",
@@ -120,18 +118,13 @@ export const es: Dictionary = {
       },
       {
         phase: "Siguiente",
-        title: "Trae tus propios modelos",
-        body: "Sube y ejecuta tus propios modelos en la GPU del satélite.",
+        title: "El datacenter orbital",
+        body: "MiniNode escala a computación compartida multi-tenant — una malla de nodos en órbita sirviendo a muchas constelaciones.",
       },
       {
         phase: "Después",
-        title: "Catálogo de software",
-        body: "Workloads listos para usar sin necesidad de desarrollar los tuyos.",
-      },
-      {
-        phase: "Futuro",
-        title: "Catálogo de modelos",
-        body: "Modelos predefinidos organizados por propósito, listos para ejecutar en órbita.",
+        title: "Catálogos",
+        body: "Workloads listos y modelos predefinidos que puedes ejecutar en órbita sin desarrollo propio.",
       },
       {
         phase: "Visión",
@@ -239,11 +232,16 @@ export const es: Dictionary = {
     label: "El hardware",
     title: "Conoce MiniNode-01.",
     subtitle:
-      "Un nodo de computación en órbita — un bus satelital estándar que lleva un payload CPU/GPU rugerizado. Aquí es donde corre tu software.",
+      "Un nodo de computación en órbita — un bus satelital estándar que lleva un payload CPU/GPU rugerizado. Aquí corre tu software, procesando los datos del resto de tu constelación.",
     caption: "Vista explotada conceptual — ilustrativa, no a escala",
-    products: ["MiniNode-01"],
-    upcoming: ["MiniNode-02"],
+    modelsLabel: "Nodo",
+    models: [
+      { name: "MiniNode-01", available: true },
+      { name: "MiniNode-02", available: false },
+      { name: "MiniNode-03", available: false },
+    ],
     comingSoon: "Pronto",
+    soonNote: "En desarrollo — specs y disponibilidad se publicarán aquí.",
     parts: [
       {
         title: "Paneles solares",
@@ -373,16 +371,22 @@ export const es: Dictionary = {
     title: "¿Listo para llevar la computación a la órbita?",
     subtitle:
       "Tanto si estás construyendo infraestructura espacial, desarrollando aplicaciones orbitales o explorando nuevas formas de procesar datos espaciales — hablemos.",
-    pilot: {
-      title: "Hablemos de una misión piloto",
-      body: "¿Explorando un caso de uso concreto? Cuéntanos tu perfil de datos y necesidades de procesamiento — evaluaremos la compatibilidad del workload juntos.",
-      button: "Empezar con un piloto",
+    meeting: {
+      title: "Agenda una reunión",
+      body: "¿Quieres saber si nuestro producto encaja en tu constelación o prefieres resolver tus preguntas en directo? Elige fecha y hora — te enviaremos la convocatoria por email.",
+      button: "Elige fecha y hora",
+      pickTime: "Horarios disponibles",
+      confirm: "Enviar solicitud",
+      emailSubject: "Solicitud de reunión",
+      emailBody:
+        "¡Hola! Me gustaría agendar una reunión:\n\n{slot}\n\nNombre: {name}\nEmail: {email}\nEmpresa: {company}\nTema: {interest}\n\n{message}",
     },
     partners: {
       title: "Partnerships e inversión",
-      body: "Trabajamos con operadores de satélites, socios tecnológicos e inversores que construyen la próxima capa de infraestructura espacial.",
+      body: "Somos un equipo early-stage financiado por sus fundadores — abiertos a conversar con operadores de satélites, socios tecnológicos e inversores.",
     },
     form: {
+      title: "¿Tienes preguntas?",
       ariaLabel: "Formulario de contacto",
       name: "Nombre *",
       email: "Email de trabajo *",
@@ -392,6 +396,7 @@ export const es: Dictionary = {
       submit: "Contactar con el equipo",
       sending: "Enviando…",
       privacyNote: "Solo usaremos tus datos para responder a tu consulta.",
+      mailtoSubject: "SpaceNet — formulario de contacto",
       placeholders: {
         name: "María García",
         email: "maria@empresa.com",
@@ -399,10 +404,8 @@ export const es: Dictionary = {
         message: "Cuéntanos tu caso de uso, perfil de datos o misión…",
       },
       interests: [
-        "Desplegar un workload",
-        "Partnership como operador de satélites",
-        "Partnership tecnológico",
-        "Misión piloto",
+        "Procesar datos de satélites en órbita",
+        "Partnership o colaboración",
         "Inversión",
         "Otro",
       ],
@@ -425,24 +428,24 @@ export const es: Dictionary = {
       {
         title: "Plataforma",
         links: [
-          { label: "Visión general", href: "#platform" },
-          { label: "Forge", href: "#products" },
-          { label: "Helm", href: "#products" },
-          { label: "MiniNode-01", href: "#mininode" },
+          { label: "Visión general", href: "/platform" },
+          { label: "Forge", href: "/product#forge" },
+          { label: "Helm", href: "/product#helm" },
+          { label: "MiniNode-01", href: "/product#mininode" },
         ],
       },
       {
         title: "Empresa",
         links: [
-          { label: "Tecnología", href: "#technology" },
-          { label: "Casos de uso", href: "#use-cases" },
-          { label: "Seguridad", href: "#security" },
+          { label: "Tecnología", href: "/technology" },
+          { label: "Casos de uso", href: "/use-cases" },
+          { label: "Seguridad", href: "/security" },
         ],
       },
       {
         title: "Recursos",
         links: [
-          { label: "Developers", href: "#developers" },
+          { label: "Developers", href: "/developers" },
           { label: "Contacto", href: "#contact" },
           { label: "LinkedIn", href: "https://www.linkedin.com", external: true },
         ],
